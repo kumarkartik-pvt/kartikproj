@@ -1,12 +1,9 @@
 
 gcloud auth list
-
 gcloud config list project
 
 gcloud services enable anthos.googleapis.com
 gcloud beta container fleet config-management enable
-
-
 
 export PROJECT_ID=$(gcloud config get-value project)
 export GCP_CLUSTER_NAME=gcp-cluster
@@ -68,8 +65,8 @@ kubectl annotate --overwrite namespace default \
 
 
 git clone https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages
-kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/istio-manifests.yaml
+kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway -n istio-system
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/istio-manifests.yaml -n istio-system
 
 
 cd $LAB_DIR
@@ -120,8 +117,33 @@ spec:
 ---------------------------------------------------------------------------------------------
  
 gcloud beta container fleet config-management apply \
-    --membership=gcp-cluster-membership \
-    --config=$pwd/applyspec.yaml \
+    --membership=gcp-cluster\
+    --config=/home/student_02_f250fd1e8fdb/applyspec.yaml \
     --project=$PROJECT_ID
  
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+---------------------------------------------------------------------------------------------
+for boutique applicaiton
+---------------------------------------------------------------------------------------------
+ 
+ applySpecVersion: 1
+spec:
+  configSync:
+    enabled: true
+    sourceFormat: unstructured
+    syncRepo: https://github.com/GoogleCloudPlatform/microservices-demo.git
+    syncBranch: main
+    secretType: none
+    policyDir: ./release
+  policyController:
+    enabled: true
+  hierarchyController:
+    enabled: false
+

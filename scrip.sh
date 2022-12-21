@@ -38,7 +38,8 @@ kubectl apply -f config-management-operator.yaml
 gcloud container fleet memberships register gcp-cluster-membership \
  --gke-cluster=us-central1-b/gcp-cluster \
  --enable-workload-identity
- 
+gcloud container hub memberships list
+
 
 ---------------------------------------------------------------------------------------------
 

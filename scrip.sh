@@ -26,7 +26,7 @@ gcloud container clusters get-credentials $GCP_CLUSTER_NAME --zone $GCP_CLUSTER_
 curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.15 > asmcli
 chmod +x asmcli
 
-//export FLEET_PROJECT_ID=${FLEET_PROJECT_ID:-$PROJECT_ID}
+export FLEET_PROJECT_ID=${FLEET_PROJECT_ID:-$PROJECT_ID}
 
 
 gcloud container fleet memberships register gcp-cluster-membership \
@@ -36,13 +36,15 @@ gcloud container hub memberships list
 
 
 ./asmcli install \
---project_id $PROJECT_ID \
---cluster_name $GCP_CLUSTER_NAME \
---cluster_location $GCP_CLUSTER_ZONE \
---output_dir . \
---managed \
---enable_all \
---ca mesh_ca
+  --project_id $GCP_PROJECT_ID \
+  --cluster_name $GCP_CLUSTER_NAME \
+  --cluster_location $GCP_CLUSTER_ZONE \
+  --fleet_id $FLEET_PROJECT_ID \
+  --output_dir . \
+  --managed \
+  --enable_all \
+  --ca mesh_ca
+
 
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -78,6 +80,10 @@ chmod +x ./nomos
 gsutil cp gs://config-management-release/released/latest/config-management-operator.yaml config-management-operator.yaml
 kubectl apply -f config-management-operator.yaml
 
+
+---------------------------------------------------------------------------------------------
+If need to create a membership seperately
+---------------------------------------------------------------------------------------------
 
 gcloud container fleet memberships register gcp-cluster-membership \
  --gke-cluster=us-central1-b/gcp-cluster \

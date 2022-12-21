@@ -3,7 +3,7 @@ kind: RestrictNetworkExclusions
 metadata:
   name: restrict-network-exclusions
 spec:
-  enforcementAction: deny
+  enforcementAction: warn
   match:
     kinds:
     - apiGroups:

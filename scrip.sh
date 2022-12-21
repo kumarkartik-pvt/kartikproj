@@ -9,7 +9,7 @@ export PROJECT_ID=$(gcloud config get-value project)
 export GCP_CLUSTER_NAME=gcp-cluster
 export GCP_CLUSTER_ZONE=us-central1-b
 
-
+---------------------------------------------------------------------------------------------
 
 gcloud container clusters create $GCP_CLUSTER_NAME \
   --zone $GCP_CLUSTER_ZONE \
@@ -19,6 +19,8 @@ gcloud container clusters create $GCP_CLUSTER_NAME \
   --workload-pool=$PROJECT_ID.svc.id.goog \
   --release-channel=regular \
   --project=$PROJECT_ID
+  
+---------------------------------------------------------------------------------------------
 
 gcloud container clusters get-credentials $GCP_CLUSTER_NAME --zone $GCP_CLUSTER_ZONE --project $PROJECT_ID
 
@@ -123,14 +125,35 @@ gcloud beta container fleet config-management apply \
     --config=/home/student_02_f250fd1e8fdb/applyspec.yaml \
     --project=$PROJECT_ID
  
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+Or a combined config management file
+---------------------------------------------------------------------------------------------
+ 
+apiVersion: addons.sigs.k8s.io/v1alpha1
+kind: ConfigManagement 
+metadata: 
+  name: config-management 
+  namespace: config-management-system 
+spec: 
+  # clusterName is required and must be unique among all managed clusters 
+  clusterName: gcp-cluster 
+  git: 
+    syncRepo: https://github.com/kumarkartik-pvt/kartikproj.git 
+    syncBranch: main 
+    secretType: none 
+    policyDir: "." 
+
+---------------------------------------------------------------------------------------------
+Apply this file simply using : kubectl apply -f ---.yaml
+---------------------------------------------------------------------------------------------
  
  
  
  
- 
- 
- 
- 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 for boutique applicaiton
 ---------------------------------------------------------------------------------------------
@@ -148,4 +171,4 @@ spec:
     enabled: true
   hierarchyController:
     enabled: false
-
+---------------------------------------------------------------------------------------------

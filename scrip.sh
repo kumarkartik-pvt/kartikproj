@@ -23,6 +23,53 @@ gcloud container clusters create $GCP_CLUSTER_NAME \
   --release-channel=regular \
   --project=$PROJECT_ID
 
+gcloud container clusters get-credentials $GCP_CLUSTER_NAME --zone $GCP_CLUSTER_ZONE --project $PROJECT_ID
+
+
+curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.15 > asmcli
+chmod +x asmcli
+
+//export FLEET_PROJECT_ID=${FLEET_PROJECT_ID:-$PROJECT_ID}
+
+
+gcloud container fleet memberships register gcp-cluster-membership \
+ --gke-cluster=us-central1-b/gcp-cluster \
+ --enable-workload-identity
+gcloud container hub memberships list
+
+
+./asmcli install \
+--project_id $PROJECT_ID \
+--cluster_name $GCP_CLUSTER_NAME \
+--cluster_location $GCP_CLUSTER_ZONE \
+--output_dir . \
+--managed \
+--enable_all \
+--ca mesh_ca
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+data:
+  mesh: |-
+    defaultConfig:
+      tracing:
+        stackdriver: {}
+kind: ConfigMap
+metadata:
+  name: istio-asm-managed
+  namespace: istio-system
+EOF
+
+
+kubectl label namespace default istio.io/rev=asm-managed --overwrite
+
+kubectl annotate --overwrite namespace default \
+  mesh.cloud.google.com/proxy='{"managed":"true"}'
+
+
+git clone https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages
+kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/istio-manifests.yaml
 
 
 cd $LAB_DIR

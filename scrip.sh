@@ -4,8 +4,25 @@ gcloud auth list
 gcloud config list project
 
 gcloud services enable anthos.googleapis.com
-
 gcloud beta container fleet config-management enable
+
+
+
+export PROJECT_ID=$(gcloud config get-value project)
+export GCP_CLUSTER_NAME=gcp-cluster
+export GCP_CLUSTER_ZONE=us-central1-b
+
+
+
+gcloud container clusters create $GCP_CLUSTER_NAME \
+  --zone $GCP_CLUSTER_ZONE \
+  --machine-type "n1-standard-2" \
+  --enable-ip-alias \
+  --num-nodes=2 \
+  --workload-pool=$PROJECT_ID.svc.id.goog \
+  --release-channel=regular \
+  --project=$PROJECT_ID
+
 
 
 cd $LAB_DIR

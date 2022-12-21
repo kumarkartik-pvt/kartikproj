@@ -28,15 +28,11 @@ chmod +x asmcli
 
 export FLEET_PROJECT_ID=${FLEET_PROJECT_ID:-$PROJECT_ID}
 
-
-gcloud container fleet memberships register gcp-cluster-membership \
- --gke-cluster=us-central1-b/gcp-cluster \
- --enable-workload-identity
 gcloud container hub memberships list
 
 
 ./asmcli install \
-  --project_id $GCP_PROJECT_ID \
+  --project_id $PROJECT_ID \
   --cluster_name $GCP_CLUSTER_NAME \
   --cluster_location $GCP_CLUSTER_ZONE \
   --fleet_id $FLEET_PROJECT_ID \

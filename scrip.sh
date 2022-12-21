@@ -121,7 +121,7 @@ spec:
  
 gcloud beta container fleet config-management apply \
     --membership=gcp-cluster-membership \
-    --config=$pwd/config-mgn.yaml \
+    --config=$pwd/applyspec.yaml \
     --project=$PROJECT_ID
  
  

@@ -1,0 +1,19 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: RestrictNetworkExclusions
+metadata:
+  name: restrict-network-exclusions
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+    - apiGroups:
+      - ""
+      kinds:
+      - Pod
+  parameters:
+    allowedInboundPortExclusions:
+    - "3289"
+    allowedOutboundIPRangeExclusions:
+    - 169.254.169.254/32
+    allowedOutboundPortExclusions:
+    - "9031"

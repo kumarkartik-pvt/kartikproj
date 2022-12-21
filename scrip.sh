@@ -35,8 +35,8 @@ gsutil cp gs://config-management-release/released/latest/config-management-opera
 kubectl apply -f config-management-operator.yaml
 
 
-gcloud container fleet memberships register MEMBERSHIP_NAME \
- --gke-cluster=GKE_CLUSTER \
+gcloud container fleet memberships register gcp-cluster-membership \
+ --gke-cluster=us-central1-b/gcp-cluster \
  --enable-workload-identity
  
 
@@ -47,7 +47,7 @@ kind: ConfigManagement
 metadata:
   name: config-management
 spec:
-  clusterName: my-cluster
+  clusterName: gcp-cluster
   enableMultiRepo: true
   policyController:
     enabled: true
@@ -72,8 +72,8 @@ spec:
 ---------------------------------------------------------------------------------------------
  
 gcloud beta container fleet config-management apply \
-    --membership=MEMBERSHIP_NAME \
-    --config=CONFIG_YAML_PATH \
-    --project=PROJECT_ID
+    --membership=gcp-cluster-membership \
+    --config=$pwd/config-mgn.yaml \
+    --project=$PROJECT_ID
  
  

@@ -60,12 +60,12 @@ spec:
   configSync:
     enabled: true
     sourceFormat: unstructured
-    syncRepo: https://github.com/GoogleCloudPlatform/anthos-config-management-samples
-    syncBranch: init
+    syncRepo: https://github.com/kumarkartik-pvt/kartikproj.git
+    syncBranch: main
     secretType: none
-    policyDir: quickstart/multirepo/root
+    policyDir: .
   policyController:
-    enabled: false
+    enabled: true
   hierarchyController:
     enabled: false
 

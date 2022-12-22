@@ -172,3 +172,44 @@ spec:
   hierarchyController:
     enabled: false
 ---------------------------------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+for root sync
+---------------------------------------------------------------------------------------------
+# root-sync.yaml
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: root-sync
+  namespace: config-management-system
+spec:
+  sourceFormat: unstructured
+  git:
+    repo: https://github.com/kumarkartik-pvt/kartikproj.git
+    branch: main
+    dir: "."
+    auth: none
+# https://cloud.google.com/anthos-config-management/docs/how-to/migrate-multi-repo
+---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+to delete cluster and membership
+---------------------------------------------------------------------------------------------
+gcloud container clusters delete gcp-cluster --zone us-central1-b
+gcloud container fleet memberships list
+gcloud container fleet memberships delete gcp-cluster-membership
